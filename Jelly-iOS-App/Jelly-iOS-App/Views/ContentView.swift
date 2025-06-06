@@ -5,82 +5,84 @@
 //  Created by Akshit Saxena on 6/3/25.
 //
 
+//import SwiftUI
+//import CoreData
+//
+//struct ContentView: View {
+//    @Environment(\.managedObjectContext) private var viewContext
+//
+//    @FetchRequest(
+//        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+//        animation: .default)
+//    private var items: FetchedResults<Item>
+//
+//    var body: some View {
+//        TabView {
+//            NavigationView {
+//                            JellyFeedView()
+//                        }
+//                        .tabItem {
+//                            Label("Feed", systemImage: "rectangle.stack.fill")
+//                        }
+//                        .tag(0)
+//                }
+//    }
+//
+//
+//}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
+
+
+
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        TabView {
+            // Tab 1: Jelly Feed
+            NavigationView {
+                JellyFeedView()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
+            .tabItem {
+                Image(systemName: "house.fill")
+                Text("Feed")
             }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            
+            // Tab 2: Camera (placeholder)
+            VStack {
+                Spacer()
+                Text("Camera Tab (coming soon)")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+                Spacer()
             }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .tabItem {
+                Image(systemName: "camera.fill")
+                Text("Camera")
+            }
+            
+            // Tab 3: Camera Roll (placeholder)
+            VStack {
+                Spacer()
+                Text("Camera Roll Tab (coming soon)")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .tabItem {
+                Image(systemName: "photo.fill.on.rectangle.fill")
+                Text("Camera Roll")
             }
         }
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

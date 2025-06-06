@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+
+struct Video: Identifiable {
+    let id: UUID
+    let url: URL
+}
