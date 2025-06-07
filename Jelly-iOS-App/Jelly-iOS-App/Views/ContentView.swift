@@ -38,51 +38,76 @@
 
 
 
+//import SwiftUI
+//
+//struct ContentView: View {
+//    var body: some View {
+//        TabView {
+//            // Tab 1: Jelly Feed
+//            NavigationView {
+//                JellyFeedView()
+//            }
+//            .tabItem {
+//                Image(systemName: "house.fill")
+//                Text("Feed")
+//            }
+//            
+//            // Tab 2: Camera (placeholder)
+//            VStack {
+//                Spacer()
+//                Text("Camera Tab (coming soon)")
+//                    .font(.title2)
+//                    .foregroundColor(.gray)
+//                Spacer()
+//            }
+//            .tabItem {
+//                Image(systemName: "camera.fill")
+//                Text("Camera")
+//            }
+//            
+//            // Tab 3: Camera Roll (placeholder)
+//            VStack {
+//                Spacer()
+//                Text("Camera Roll Tab (coming soon)")
+//                    .font(.title2)
+//                    .foregroundColor(.gray)
+//                Spacer()
+//            }
+//            .tabItem {
+//                Image(systemName: "photo.fill.on.rectangle.fill")
+//                Text("Camera Roll")
+//            }
+//        }
+//    }
+//}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
+
+
+// Views/ContentView.swift
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        TabView {
-            // Tab 1: Jelly Feed
-            NavigationView {
-                JellyFeedView()
-            }
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Feed")
-            }
-            
-            // Tab 2: Camera (placeholder)
-            VStack {
-                Spacer()
-                Text("Camera Tab (coming soon)")
-                    .font(.title2)
-                    .foregroundColor(.gray)
-                Spacer()
-            }
-            .tabItem {
-                Image(systemName: "camera.fill")
-                Text("Camera")
-            }
-            
-            // Tab 3: Camera Roll (placeholder)
-            VStack {
-                Spacer()
-                Text("Camera Roll Tab (coming soon)")
-                    .font(.title2)
-                    .foregroundColor(.gray)
-                Spacer()
-            }
-            .tabItem {
-                Image(systemName: "photo.fill.on.rectangle.fill")
-                Text("Camera Roll")
-            }
-        }
+  @State private var selected = 0
+  
+  var body: some View {
+    TabView(selection: $selected) {
+      JellyFeedView()
+        .tabItem { Label("Feed",   systemImage: "house") }
+        .tag(0)
+      
+      DualCameraView()
+        .tabItem { Label("Camera", systemImage: "camera") }
+        .tag(1)
+      
+      CameraRollView()
+        .tabItem { Label("Roll",   systemImage: "photo.on.rectangle") }
+        .tag(2)
     }
+  }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}

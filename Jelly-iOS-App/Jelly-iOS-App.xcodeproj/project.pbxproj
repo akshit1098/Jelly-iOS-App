@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0BC8231A2DF3DD4F00D53A9C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0BC823192DF3DD4F00D53A9C /* FirebaseAuth */; };
+		0BC8231C2DF3DD4F00D53A9C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0BC8231B2DF3DD4F00D53A9C /* FirebaseCore */; };
+		0BC8231E2DF3DD4F00D53A9C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0BC8231D2DF3DD4F00D53A9C /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0B6652CC2DEF88DD0047C54C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BC8231C2DF3DD4F00D53A9C /* FirebaseCore in Frameworks */,
+				0BC8231A2DF3DD4F00D53A9C /* FirebaseAuth in Frameworks */,
+				0BC8231E2DF3DD4F00D53A9C /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +121,9 @@
 			);
 			name = "Jelly-iOS-App";
 			packageProductDependencies = (
+				0BC823192DF3DD4F00D53A9C /* FirebaseAuth */,
+				0BC8231B2DF3DD4F00D53A9C /* FirebaseCore */,
+				0BC8231D2DF3DD4F00D53A9C /* FirebaseStorage */,
 			);
 			productName = "Jelly-iOS-App";
 			productReference = 0B6652B62DEF88DA0047C54C /* Jelly-iOS-App.app */;
@@ -196,6 +208,7 @@
 			mainGroup = 0B6652AD2DEF88DA0047C54C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				0BC823182DF3DD4F00D53A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B6652B72DEF88DA0047C54C /* Products */;
@@ -401,6 +414,9 @@
 				DEVELOPMENT_TEAM = 2445GQK3UV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to record dual-POV videos.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone to record audio for your videos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to save your recorded videos to your photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -430,6 +446,9 @@
 				DEVELOPMENT_TEAM = 2445GQK3UV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to record dual-POV videos.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone to record audio for your videos.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to save your recorded videos to your photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -560,6 +579,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0BC823182DF3DD4F00D53A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0BC823192DF3DD4F00D53A9C /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0BC823182DF3DD4F00D53A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		0BC8231B2DF3DD4F00D53A9C /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0BC823182DF3DD4F00D53A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		0BC8231D2DF3DD4F00D53A9C /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0BC823182DF3DD4F00D53A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0B6652AE2DEF88DA0047C54C /* Project object */;
 }

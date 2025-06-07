@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseCore
 
 @main
 struct Jelly_iOS_AppApp: App {
     let persistenceController = PersistenceController.shared
+    init() {
+        FirebaseApp.configure()
+    }
 
     var body: some Scene {
         WindowGroup {
