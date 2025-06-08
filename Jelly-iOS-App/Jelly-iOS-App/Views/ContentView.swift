@@ -88,26 +88,23 @@
 //}
 
 
-// Views/ContentView.swift
 import SwiftUI
 
 struct ContentView: View {
-  @State private var selected = 0
-  
+  @State private var selected = 1
+
   var body: some View {
     TabView(selection: $selected) {
       JellyFeedView()
-        .tabItem { Label("Feed",   systemImage: "house") }
-        .tag(0)
-      
-      DualCameraView()
-        .tabItem { Label("Camera", systemImage: "camera") }
-        .tag(1)
-      
+        .tabItem { Label("Feed",   systemImage: "house") }.tag(0)
+
+      NavigationView {
+        DualCameraView()
+      }
+      .tabItem { Label("Camera", systemImage: "camera") }.tag(1)
+
       CameraRollView()
-        .tabItem { Label("Roll",   systemImage: "photo.on.rectangle") }
-        .tag(2)
+        .tabItem { Label("Roll",   systemImage: "photo.on.rectangle") }.tag(2)
     }
   }
 }
-

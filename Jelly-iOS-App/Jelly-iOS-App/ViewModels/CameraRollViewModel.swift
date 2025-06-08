@@ -5,29 +5,20 @@
 //  Created by Akshit Saxena on 6/6/25.
 //
 
-import Foundation
-import FirebaseStorage
+import SwiftUI
+import AVKit
 
-/// Fetches all video URLs from the "videos/" folder
-class CameraRollViewModel: ObservableObject {
-  @Published var videoURLs: [URL] = []
+final class CameraRollViewModel: ObservableObject {
+  @Published var videos: [URL] = []
 
-  private let storage = Storage.storage().reference().child("videos")
+  init() { loadLocalClips() }
 
-  func loadVideos() {
-    storage.listAll { result, error in
-      if let items = result?.items {
-        items.forEach { item in
-          item.downloadURL { url, _ in
-            if let url = url {
-              DispatchQueue.main.async {
-                self.videoURLs.append(url)
-              }
-            }
-          }
-        }
-      }
-    }
+  func loadLocalClips() {
+    let tmp = FileManager.default.temporaryDirectory
+    videos = (try? FileManager.default
+                .contentsOfDirectory(at: tmp,
+                                     includingPropertiesForKeys: nil,
+                                     options: [.skipsHiddenFiles])
+                .filter { $0.pathExtension == "mov" }) ?? []
   }
 }
-

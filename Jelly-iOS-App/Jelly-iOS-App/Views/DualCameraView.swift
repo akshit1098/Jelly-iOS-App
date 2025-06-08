@@ -76,92 +76,68 @@
 //}
 
 
+//
+//  DualCameraView.swift
+//  Jelly-iOS-App
+//
+//  Created by Akshit Saxena on 6/7/25.
+//
+
+
 import SwiftUI
 
 struct DualCameraView: View {
-    /// How long to record: 60s or 15s
-    enum Duration: Int, CaseIterable, Identifiable {
-        case sixty   = 60
-        case fifteen = 15
+  @StateObject private var vm = DualCameraViewModel()
+  @State private var navigateToRoll = false
 
-        // Identifiable conformance
-        var id: Int { rawValue }
+  var body: some View {
+    ZStack {
+      // your two-pane live preview
+      MultiCamPreview(vm: vm)
+        .edgesIgnoringSafeArea(.all)
 
-        // Easy-to-display label
-        var label: String { "\(rawValue)s" }
-
-        // If you ever need a TimeInterval:
-        var timeInterval: TimeInterval { TimeInterval(rawValue) }
-    }
-
-    @State private var chosen: Duration = .fifteen
-
-    var body: some View {
-        ZStack {
-          // ─── Your live preview layer sits behind this… ───
-          MultiCamPreview()
-            .edgesIgnoringSafeArea(.all)
-
-          // ─── Your overlay UI ───
-          VStack {
-            HStack {
-              Button { /* share link */ }   label: { Image(systemName: "link") }
-                .styleOverlayIcon()
-
-              Button { /* swap cameras */ } label: { Image(systemName: "arrow.triangle.2.circlepath.camera") }
-                .styleOverlayIcon()
-
-              Spacer()
-
-              Button { /* settings */ }     label: { Image(systemName: "gearshape") }
-                .styleOverlayIcon()
-
-              Button { /* flip front/back */ }  label: { Image(systemName: "camera") }
-                .styleOverlayIcon()
-            }
-            .padding(.horizontal)
-            .padding(.top, 44)
-
-            Spacer()
-
-            // ─── The only change you needed here ───
-            Picker("", selection: $chosen) {
-              ForEach(Duration.allCases) { d in
-                Text(d.label).tag(d)
-              }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .frame(width: 140)
-            .padding(.bottom, 20)
-
-            Button {
-              // wire these up to your view-model’s start/stop
-            } label: {
-              ZStack {
-                Circle()
-                  .strokeBorder(Color.white, lineWidth: 4)
-                  .frame(width: 80, height: 80)
-                Circle()
-                  .fill(Color.red)
-                  .frame(width: 56, height: 56)
-              }
-            }
-            .padding(.bottom, 60)
+      // overlay record button
+      VStack {
+        Spacer()
+        Button(action: {
+          vm.isRecording ? vm.stopRecording() : vm.startRecording()
+        }) {
+          ZStack {
+            Circle()
+              .strokeBorder(Color.white, lineWidth: 4)
+              .frame(width: 80, height: 80)
+            Circle()
+              .fill(vm.isRecording ? Color.red : Color.white.opacity(0.8))
+              .frame(width: 56, height: 56)
           }
         }
-        .navigationBarHidden(true)
+        .padding(.bottom, 60)
+      }
     }
-}
-
-private extension View {
-  /// little translucent round buttons in the top bar
-  func styleOverlayIcon() -> some View {
-    self
-      .font(.system(size: 20))
-      .padding(8)
-      .background(Color.black.opacity(0.3))
-      .clipShape(Circle())
-      .foregroundColor(.white)
+    // when delegate sets recordedURLs, show “Save?” prompt
+    .alert(isPresented: $vm.showSavePrompt) {
+      Alert(
+        title: Text("Save recording?"),
+        message: Text("Would you like to save this clip to your camera roll?"),
+        primaryButton: .default(Text("Save")) {
+          // upload both then go to roll
+          guard let urls = vm.recordedURLs else { return }
+          FirebaseStorageService.shared.uploadVideo(localURL: urls.front) { _ in }
+          FirebaseStorageService.shared.uploadVideo(localURL: urls.back) { _ in
+            navigateToRoll = true
+          }
+        },
+        secondaryButton: .cancel {
+          // discard temp files
+        }
+      )
+    }
+    .background(
+      NavigationLink(destination: CameraRollView(),
+                     isActive: $navigateToRoll) {
+        EmptyView()
+      }
+    )
+    .navigationBarHidden(true)
   }
 }
-

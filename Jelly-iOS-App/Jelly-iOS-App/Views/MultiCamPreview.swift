@@ -5,63 +5,61 @@
 //  Created by Akshit Saxena on 6/7/25.
 //
 
+// MultiCamPreview.swift
+
 import SwiftUI
 import AVFoundation
 
-/// Wraps the DualCameraViewModel and draws its two preview layers (or colored placeholders + debug text).
-struct MultiCamPreview: View {
-    @StateObject private var vm = DualCameraViewModel()
-
-    var body: some View {
-        GeometryReader { geo in
-            VStack(spacing: 0) {
-                // ── Top half: front camera or red
-                Group {
-                    if let frontLayer = vm.frontPreviewLayer {
-                        PreviewContainer(previewLayer: frontLayer)
-                            .overlay(Text("Front OK")
-                                        .foregroundColor(.white)
-                                        .padding(4)
-                                        .background(Color.black.opacity(0.5))
-                                        .cornerRadius(4)
-                                        .padding(8),
-                                     alignment: .topLeading)
-                    } else {
-                        Color.red
-                            .overlay(Text("NO FRONT LAYER")
-                                        .foregroundColor(.white)
-                                        .bold())
-                    }
-                }
-                .frame(height: geo.size.height / 2)
-
-                // ── Bottom half: back camera or blue
-                Group {
-                    if let backLayer = vm.backPreviewLayer {
-                        PreviewContainer(previewLayer: backLayer)
-                            .overlay(Text("Back OK")
-                                        .foregroundColor(.white)
-                                        .padding(4)
-                                        .background(Color.black.opacity(0.5))
-                                        .cornerRadius(4)
-                                        .padding(8),
-                                     alignment: .topLeading)
-                    } else {
-                        Color.blue
-                            .overlay(Text("NO BACK LAYER")
-                                        .foregroundColor(.white)
-                                        .bold())
-                    }
-                }
-                .frame(height: geo.size.height / 2)
-            }
-        }
-        // log when these published properties change:
-        .onReceive(vm.$frontPreviewLayer) { layer in
-            print("[MultiCamPreview] frontPreviewLayer →", layer as Any)
-        }
-        .onReceive(vm.$backPreviewLayer) { layer in
-            print("[MultiCamPreview] backPreviewLayer  →", layer as Any)
-        }
+/// A UIView that knows how to lay out two video-preview layers,
+/// one on its top half (back camera) and one on its bottom half (front camera).
+class PreviewContainerView: UIView {
+  /// Back camera preview
+  var backLayer: AVCaptureVideoPreviewLayer? {
+    willSet { backLayer?.removeFromSuperlayer() }
+    didSet {
+      guard let layer = backLayer else { return }
+      layer.videoGravity = .resizeAspectFill
+      // Insert below frontLayer if both exist
+      let idx = frontLayer != nil ? 0 : self.layer.sublayers?.count ?? 0
+      self.layer.insertSublayer(layer, at: UInt32(idx))
+      setNeedsLayout()
     }
+  }
+  /// Front camera preview
+  var frontLayer: AVCaptureVideoPreviewLayer? {
+    willSet { frontLayer?.removeFromSuperlayer() }
+    didSet {
+      guard let layer = frontLayer else { return }
+      layer.videoGravity = .resizeAspectFill
+      self.layer.addSublayer(layer)
+      setNeedsLayout()
+    }
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    let halfH = bounds.height / 2
+    backLayer?.frame  = CGRect(x: 0, y: 0,           width: bounds.width, height: halfH)
+    frontLayer?.frame = CGRect(x: 0, y: halfH,       width: bounds.width, height: halfH)
+  }
 }
+
+/// SwiftUI wrapper around the above container.
+struct MultiCamPreview: UIViewRepresentable {
+  @ObservedObject var vm: DualCameraViewModel
+
+  func makeUIView(context: Context) -> PreviewContainerView {
+    let view = PreviewContainerView()
+    // as soon as the VM has its layers, assign them
+    view.backLayer  = vm.backPreviewLayer
+    view.frontLayer = vm.frontPreviewLayer
+    return view
+  }
+
+  func updateUIView(_ uiView: PreviewContainerView, context: Context) {
+    // re-assign whenever VM publishes new layers
+    uiView.backLayer  = vm.backPreviewLayer
+    uiView.frontLayer = vm.frontPreviewLayer
+  }
+}
+
