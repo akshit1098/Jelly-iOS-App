@@ -91,20 +91,34 @@
 import SwiftUI
 
 struct ContentView: View {
-  @State private var selected = 1
+    @State private var selected = 0
 
-  var body: some View {
-    TabView(selection: $selected) {
-      JellyFeedView()
-        .tabItem { Label("Feed",   systemImage: "house") }.tag(0)
+    var body: some View {
+        TabView(selection: $selected) {
+            
+            // ── Feed Tab ──
+            NavigationStack {
+                JellyFeedView()
+                  .navigationTitle("Feed")
+            }
+            .tabItem { Label("Feed", systemImage: "house") }
+            .tag(0)
 
-      NavigationView {
-        DualCameraView()
-      }
-      .tabItem { Label("Camera", systemImage: "camera") }.tag(1)
+            // ── Camera Tab ──
+            NavigationStack {
+                DualCameraView(selectedTab: $selected)
+                  .navigationBarHidden(true)
+            }
+            .tabItem { Label("Camera", systemImage: "camera") }
+            .tag(1)
 
-      CameraRollView()
-        .tabItem { Label("Roll",   systemImage: "photo.on.rectangle") }.tag(2)
+            // ── Roll Tab ──
+            NavigationStack {
+                CameraRollView()
+                  .navigationTitle("Camera Roll")
+            }
+            .tabItem { Label("Roll", systemImage: "photo.on.rectangle") }
+            .tag(2)
+        }
     }
-  }
 }

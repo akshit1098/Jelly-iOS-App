@@ -8,32 +8,58 @@
 import Foundation
 import FirebaseStorage
 
-/// A simple singleton to upload local video files to Firebase Storage
-class FirebaseStorageService {
-  static let shared = FirebaseStorageService()
-  private let storage = Storage.storage()
+/// Simple singleton wrapper around Firebase Storage
+final class FirebaseStorageService {
+    static let shared = FirebaseStorageService()
+    private init() {}
 
-  private init() {}
+    private let storage = Storage.storage()
 
-  /// Uploads a single file at localURL, returns a download URL on success
-  func uploadVideo(
-    localURL: URL,
-    completion: @escaping (Result<URL, Error>) -> Void
-  ) {
-    let filename = "\(UUID().uuidString).mp4"
-    let ref = storage.reference().child("videos/\(filename)")
-    ref.putFile(from: localURL, metadata: nil) { _, error in
-      if let err = error {
-        completion(.failure(err)); return
-      }
-      ref.downloadURL { url, error in
-        if let url = url {
-          completion(.success(url))
-        } else if let err = error {
-          completion(.failure(err))
+    /// Upload a single file at `localURL` into "videos/\(UUID).mov"
+    func uploadVideo(localURL: URL, completion: @escaping (Result<Void, Error>) -> Void) {
+        let uuid = UUID().uuidString
+        let remoteRef = storage.reference()
+                              .child("videos")
+                              .child("\(uuid).mov")
+
+        let _ = remoteRef.putFile(from: localURL, metadata: nil) { _, err in
+            if let err = err {
+                completion(.failure(err))
+            } else {
+                completion(.success(()))
+            }
         }
-      }
     }
-  }
-}
 
+    /// List all files under "videos/" and return their download URLs
+    func listAllVideos(completion: @escaping ([URL]) -> Void) {
+        let videosRef = storage.reference().child("videos")
+        videosRef.listAll { (result, error) in
+            guard error == nil else {
+                print("⚠️ Failed to list videos:", error!)
+                return completion([])
+            }
+
+            let items = result!.items
+            var urls: [URL] = []
+            let group = DispatchGroup()
+
+            for item in items {
+                group.enter()
+                item.downloadURL { (url, err) in
+                    if let url = url {
+                        urls.append(url)
+                    } else {
+                        print("⚠️ couldn’t get downloadURL for \(item.name):", err ?? "")
+                    }
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) {
+                // Sort if you need newest-first, etc.
+                completion(urls)
+            }
+        }
+    }
+}

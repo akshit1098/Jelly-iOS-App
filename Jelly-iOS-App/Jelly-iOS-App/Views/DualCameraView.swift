@@ -76,32 +76,45 @@
 //}
 
 
-//
-//  DualCameraView.swift
-//  Jelly-iOS-App
-//
-//  Created by Akshit Saxena on 6/7/25.
-//
-
-
+// DualCameraView.swift
 import SwiftUI
 
 struct DualCameraView: View {
+  @Binding var selectedTab: Int
   @StateObject private var vm = DualCameraViewModel()
-  @State private var navigateToRoll = false
+
+  /// Which segment (15s vs 60s)
+  enum Duration: Int, CaseIterable, Identifiable {
+    case fifteen = 15, sixty = 60
+    var id: Int { rawValue }
+    var label: String { "\(rawValue)s" }
+  }
+  @State private var chosen: Duration = .fifteen
+
+  /// Tracks upload/spinner & navigation
+  @State private var isSaving = false
+  @State private var goToRoll = false
 
   var body: some View {
     ZStack {
-      // your two-pane live preview
+      // ─── Live multicam preview ───
       MultiCamPreview(vm: vm)
         .edgesIgnoringSafeArea(.all)
 
-      // overlay record button
+      // ─── UI overlay ───
       VStack {
+        // … your top bar + picker …
+
         Spacer()
-        Button(action: {
-          vm.isRecording ? vm.stopRecording() : vm.startRecording()
-        }) {
+
+        // Record / Stop button
+        Button {
+          if vm.isRecording {
+            vm.stopRecording()
+          } else {
+            vm.startRecording()
+          }
+        } label: {
           ZStack {
             Circle()
               .strokeBorder(Color.white, lineWidth: 4)
@@ -113,30 +126,34 @@ struct DualCameraView: View {
         }
         .padding(.bottom, 60)
       }
-    }
-    // when delegate sets recordedURLs, show “Save?” prompt
-    .alert(isPresented: $vm.showSavePrompt) {
-      Alert(
-        title: Text("Save recording?"),
-        message: Text("Would you like to save this clip to your camera roll?"),
-        primaryButton: .default(Text("Save")) {
-          // upload both then go to roll
-          guard let urls = vm.recordedURLs else { return }
-          FirebaseStorageService.shared.uploadVideo(localURL: urls.front) { _ in }
-          FirebaseStorageService.shared.uploadVideo(localURL: urls.back) { _ in
-            navigateToRoll = true
-          }
-        },
-        secondaryButton: .cancel {
-          // discard temp files
-        }
-      )
-    }
-    .background(
-      NavigationLink(destination: CameraRollView(),
-                     isActive: $navigateToRoll) {
-        EmptyView()
+
+      // ─── Full-screen saving spinner ───
+      if isSaving {
+        Color.black.opacity(0.4)
+          .ignoresSafeArea()
+        ProgressView("Saving…")
+          .progressViewStyle(CircularProgressViewStyle(tint: .white))
+          .scaleEffect(1.5)
       }
+    }
+    .onReceive(vm.$recordingURL.compactMap { $0 }) { url in
+      isSaving = true
+      
+      // upload then navigate
+      FirebaseStorageService.shared.uploadVideo(localURL: url) { _ in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+          isSaving = false
+          selectedTab = 2
+          goToRoll = true
+        }
+      }
+    }
+    // Hidden link to Tab 3
+    .background(
+      NavigationLink(
+        destination: CameraRollView(),
+        isActive: $goToRoll
+      ) { EmptyView() }
     )
     .navigationBarHidden(true)
   }

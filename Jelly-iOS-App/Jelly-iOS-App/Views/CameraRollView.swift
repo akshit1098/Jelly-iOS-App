@@ -9,22 +9,25 @@ import SwiftUI
 import AVKit
 
 struct CameraRollView: View {
-  @StateObject private var vm = CameraRollViewModel()
-  private let cols = [ GridItem(.flexible()),
-                       GridItem(.flexible()) ]
+    @StateObject private var vm = CameraRollViewModel()
 
-  var body: some View {
-    ScrollView {
-      LazyVGrid(columns: cols, spacing: 16) {
-        ForEach(vm.videos, id: \.self) { url in
-          VideoPlayer(player: AVPlayer(url: url))
-            .frame(height: 200)
-            .cornerRadius(8)
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(vm.videos, id: \.self) { url in
+                    VideoPlayer(player: AVPlayer(url: url))
+                        .frame(height: 200)
+                        .cornerRadius(8)
+                }
+            }
+            .padding()
         }
-      }
-      .padding()
+        .navigationTitle("Camera Roll")
+        .onAppear { vm.fetchVideos() }
     }
-    .navigationTitle("Camera Roll")
-    .onAppear { vm.loadLocalClips() }
-  }
 }
