@@ -145,7 +145,7 @@ Jelly-iOS-App/
 - **Why:** No public API; avoids brittle HTML parsing  
 
 ### Dual-Cam AVFoundation
-- **Approach:** `AVCaptureMultiCamSession` + `AVAssetWriter` to merge tracks  
+- **Approach:** `AVCaptureMultiCamSession` + `AVAssetExportSession` to merge tracks  
 - **Limitation:** iPhone XS+ required  
 
 ### Firebase Integration
