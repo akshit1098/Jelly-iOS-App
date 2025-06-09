@@ -56,6 +56,7 @@ Jelly-iOS-App/
     ├── camera_screen.png
     └── roll_screen.png
 
+```
 ---
 
 ## 🧱 MVVM Architecture
