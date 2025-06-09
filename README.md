@@ -25,36 +25,36 @@ This app has **three tabs**:
 
 ## 🗂 File Structure
 
+```plaintext
 Jelly-iOS-App/
-├── Jelly-iOS-App/ ← Xcode project folder
-│ ├── Models/
-│ │ └── Video.swift
-│ ├── Services/
-│ │ ├── FirebaseStorageService.swift
-│ │ └── VideoService.swift
-│ ├── ViewModels/
-│ │ ├── FeedViewModel.swift
-│ │ ├── DualCameraViewModel.swift
-│ │ └── CameraRollViewModel.swift
-│ ├── Views/
-│ │ ├── ContentView.swift
-│ │ ├── JellyFeedView.swift
-│ │ ├── ScrapingWebView.swift
-│ │ ├── PreviewContainer.swift
-│ │ ├── VideoPlayerView.swift
-│ │ ├── VideoRowView.swift
-│ │ ├── MultiCamPreview.swift
-│ │ ├── DualCameraView.swift
-│ │ ├── CameraPreview.swift
-│ │ └── CameraRollView.swift
-│ ├── Assets.xcassets/
-│ └── GoogleService-Info.plist
+├── Jelly-iOS-App/           ← Xcode project folder
+│   ├── Models/
+│   │   └── Video.swift
+│   ├── Services/
+│   │   ├── FirebaseStorageService.swift
+│   │   └── VideoService.swift
+│   ├── ViewModels/
+│   │   ├── FeedViewModel.swift
+│   │   ├── DualCameraViewModel.swift
+│   │   └── CameraRollViewModel.swift
+│   ├── Views/
+│   │   ├── ContentView.swift
+│   │   ├── JellyFeedView.swift
+│   │   ├── ScrapingWebView.swift
+│   │   ├── PreviewContainer.swift
+│   │   ├── VideoPlayerView.swift
+│   │   ├── VideoRowView.swift
+│   │   ├── MultiCamPreview.swift
+│   │   ├── DualCameraView.swift
+│   │   ├── CameraPreview.swift
+│   │   └── CameraRollView.swift
+│   ├── Assets.xcassets/
+│   └── GoogleService-Info.plist
 └── Screenshots/
-├── filestructure.png
-├── feed_screen.png
-├── camera_screen.png
-└── roll_screen.png
-
+    ├── filestructure.png
+    ├── feed_screen.png
+    ├── camera_screen.png
+    └── roll_screen.png
 
 ---
 
@@ -169,7 +169,7 @@ Use a real iPhone (multi-cam unsupported in Simulator)
 
 Grant Camera & Microphone permissions
 
-🌱 Future Improvements
+## 🌱 Future Improvements
 Firebase Authentication & user profiles
 
 Like/comment interactions on feed videos
@@ -180,7 +180,7 @@ Offline caching & background retry logic
 
 Expanded test coverage (unit + UI)
 
-🧪 Final Notes
+## 🧪 Final Notes
 Demonstrates a full-stack iOS prototype with:
 
 Low-level AVFoundation camera access
