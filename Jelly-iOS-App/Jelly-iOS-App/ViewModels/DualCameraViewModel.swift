@@ -5,32 +5,7 @@
 //  Created by Akshit Saxena on 6/6/25.
 //
 
-//
-//  DualCameraViewModel.swift
-//  Jelly-iOS-App
-//
-//  Created by You on 2025-06-07.
-//
 
-//
-//  DualCameraViewModel.swift
-//  Jelly-iOS-App
-//
-//  Created by You on 2025-06-07.
-//
-
-//
-//  DualCameraViewModel.swift
-//  Jelly-iOS-App
-//
-//  Created by You on 2025-06-07.
-//
-
-// DualCameraViewModel.swift
-// Jelly-iOS-App
-
-// DualCameraViewModel.swift
-// Jelly-iOS-App
 
 import Foundation
 import AVFoundation
