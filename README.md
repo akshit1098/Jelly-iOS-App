@@ -59,7 +59,6 @@ Jelly-iOS-App/
 │   ├── Assets.xcassets/
 │   └── GoogleService-Info.plist
 └── Screenshots/
-    ├── filestructure.png
     ├── feed_screen.png
     ├── camera_screen.png
     └── roll_screen.png
