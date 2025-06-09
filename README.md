@@ -1,6 +1,44 @@
 # Jelly-iOS-App
 A 3-tab Swift iOS app featuring a TikTok-style video feed, a dual-camera interface that records synced front/back videos, and a local camera roll for playback. Built to showcase AVFoundation, media handling, and intuitive UI/UX design.
 
+
+
+<!-- App Icon -->
+<p align="center">
+  <img src="Screenshots/AppIcon.png" alt="Jelly App Icon" width="80" height="80" />
+</p>
+
+
+---
+
+## 🎥 Demo
+
+<p align="center">
+  <!-- Tab 1: Feed demo -->
+  <video 
+    src="Screenshots/feed_demo.mp4" 
+    width="320" 
+    controls 
+    loop 
+    muted
+    poster="Screenshots/feed_poster.png"
+  ></video>
+
+  <!-- Spacer -->
+  &nbsp;&nbsp;&nbsp;&nbsp;
+
+  <!-- Tab 2 & 3: Camera + Roll demo -->
+  <video 
+    src="Screenshots/recording_demo.mp4" 
+    width="320" 
+    controls 
+    loop 
+    muted
+    poster="Screenshots/recording_poster.png"
+  ></video>
+</p>
+
+
 ---
 
 ## 🧭 Overview
