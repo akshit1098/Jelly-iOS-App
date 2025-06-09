@@ -11,36 +11,6 @@ A 3-tab Swift iOS app featuring a TikTok-style video feed, a dual-camera interfa
 
 ---
 
-## 🎥 Demo
-
-<p align="center">
-  <!-- Tab 1: Feed demo -->
-  <video 
-    src="Screenshots/feed_demo.mp4" 
-    width="320" 
-    controls 
-    loop 
-    muted
-    poster="Screenshots/feed_poster.png"
-  ></video>
-
-  <!-- Spacer -->
-  &nbsp;&nbsp;&nbsp;&nbsp;
-
-  <!-- Tab 2 & 3: Camera + Roll demo -->
-  <video 
-    src="Screenshots/recording_demo.mp4" 
-    width="320" 
-    controls 
-    loop 
-    muted
-    poster="Screenshots/recording_poster.png"
-  ></video>
-</p>
-
-
----
-
 ## 🧭 Overview
 
 This app has **three tabs**:
@@ -218,6 +188,15 @@ AR filters & camera effects
 Offline caching & background retry logic
 
 Expanded test coverage (unit + UI)
+
+
+## 🎥 Demo
+
+- **Tab 1 – Feed** demo:  
+  🔗 [Watch on Google Drive](https://drive.google.com/file/d/1dFzL-FL0pLCP3GnycLXI_grLdBpXFLQ7/view?usp=sharing)  
+- **Tab 2 & 3 – Camera Recording & Roll** demo:  
+  🔗 [Watch on Google Drive](https://drive.google.com/file/d/1QixMFoXeDeQHK32UV6DhjJTqUBTvOs88/view?usp=sharing)
+
 
 ## 🧪 Final Notes
 Demonstrates a full-stack iOS prototype with:
